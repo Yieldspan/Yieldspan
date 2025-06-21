@@ -15,7 +15,7 @@
 - Supports `emergencyWithdraw()` for balance recovery
 
 **📄 Etherscan Deployment:**  
-[View Contract on Sepolia Etherscan](https://sepolia.etherscan.io/address/0x661F616253621851052c668b030bE795638eA859) ← *(replace with actual deployed address)*
+[View Contract on Sepolia Etherscan](https://sepolia.etherscan.io/address/0x661F616253621851052c668b030bE795638eA859)
 ```
 ```
 ### 2. 🌐 Backend Listener (Node.js)
