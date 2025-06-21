@@ -1,0 +1,12 @@
+[
+  {
+    "timestamp": "2025-06-21T18:13:57.990Z",
+    "bestSource": "dexscreener",
+    "bestPrice": 1.000032,
+    "worstSource": "coingecko",
+    "worstPrice": 0.240379,
+    "spreadPercentage": 316.02303029798776,
+    "simulatedProfit": 632.0460605959755,
+    "baseAmount": 200
+  }
+]

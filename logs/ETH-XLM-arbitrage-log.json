@@ -1,0 +1,12 @@
+[
+  {
+    "timestamp": "2025-06-21T18:13:58.315Z",
+    "bestSource": "fallback",
+    "bestPrice": 16000,
+    "worstSource": "coingecko",
+    "worstPrice": 10012,
+    "spreadPercentage": 59.80823012385138,
+    "simulatedProfit": 119.61646024770276,
+    "baseAmount": 200
+  }
+]
