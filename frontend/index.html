@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yieldspan - AI Portfolio Optimization</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app">
+      <!-- Header -->
+      <header class="header">
+        <div class="container">
+          <div class="header-content">
+            <div class="logo">
+              <span class="logo-text">Yieldspan</span>
+              <div class="chain-badges">
+                <span class="chain-badge ethereum">ETH</span>
+                <span class="bridge-arrow">↔</span>
+                <span class="chain-badge stellar">XLM</span>
+              </div>
+            </div>
+            <div class="header-badge">
+              <span class="badge-ml">Cross-Chain ML</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="container">
+          <div class="hero-content">
+            <div class="chain-visual">
+              <div class="chain-item ethereum-chain">
+                <div class="chain-logo">ETH</div>
+                <div class="chain-name">Ethereum</div>
+                <div class="chain-desc">Stake & Earn</div>
+              </div>
+              <div class="bridge-connector">
+                <div class="bridge-line"></div>
+                <div class="bridge-icon"></div>
+                <div class="bridge-text">AI Bridge</div>
+              </div>
+              <div class="chain-item stellar-chain">
+                <div class="chain-logo">XLM</div>
+                <div class="chain-name">Stellar</div>
+                <div class="chain-desc">Rewards & Yield</div>
+              </div>
+            </div>
+            
+            <!-- Wallet Connection Section -->
+            <div class="wallet-section">
+              <div class="wallet-item">
+                <h4>Connect Ethereum Wallet</h4>
+                <button class="wallet-connect-btn metamask-btn" id="connectMetaMaskBtn">
+                  Connect MetaMask
+                </button>
+                <div id="ethereum-wallet-status"></div>
+              </div>
+              
+              <div class="wallet-item">
+                <h4>Connect Stellar Wallet</h4>
+                <button class="wallet-connect-btn freighter-btn" id="connectFreighterBtn">
+                  Connect Freighter
+                </button>
+                <div id="stellar-wallet-status"></div>
+              </div>
+            </div>
+            
+            <h1 class="hero-title">
+              Cross-Chain AI Portfolio Optimization
+              <span class="gradient-text">Ethereum → Stellar Bridge</span>
+            </h1>
+            <p class="hero-subtitle">
+              Stake on Ethereum, earn optimized rewards on Stellar. Our AI analyzes 52 weeks of cross-chain market data to maximize your yield across both ecosystems.
+            </p>
+            <div class="stats-row">
+              <div class="stat">
+                <div class="stat-number">9.4%</div>
+                <div class="stat-label">Cross-Chain APY</div>
+              </div>
+              <div class="stat">
+                <div class="stat-number">1.23</div>
+                <div class="stat-label">Bridge Ratio</div>
+              </div>
+              <div class="stat">
+                <div class="stat-number">2</div>
+                <div class="stat-label">Chains Connected</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Input Section -->
+      <section class="input-section">
+        <div class="container">
+          <div class="input-card">
+            <div class="bridge-flow">
+              <div class="flow-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                  <div class="step-title">Stake on Ethereum</div>
+                  <div class="step-desc">ETH/USDC/USDT</div>
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                  <div class="step-title">AI Optimization</div>
+                  <div class="step-desc">Cross-Chain Analysis</div>
+                </div>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                  <div class="step-title">Earn on Stellar</div>
+                  <div class="step-desc">XLM Rewards</div>
+                </div>
+              </div>
+            </div>
+            
+            <h2 class="section-title">Cross-Chain Portfolio Optimization</h2>
+            <p class="section-subtitle">
+              Stake assets on Ethereum, get AI-optimized rewards distributed on Stellar using our proprietary bridge technology.
+            </p>
+            
+            <form class="optimization-form" id="optimizationForm">
+              <div class="form-group">
+                <label for="amount" class="form-label">Investment Amount ($)</label>
+                <div class="input-with-chains">
+                  <input 
+                    type="number" 
+                    id="amount" 
+                    name="amount" 
+                    class="form-input" 
+                    value="1000"
+                    min="100"
+                    step="100"
+                    required
+                  />
+                  <div class="chain-indicator">
+                    <span class="from-chain">ETH</span>
+                    <span class="to-chain">XLM</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="duration" class="form-label">Bridge Duration</label>
+                <select id="duration" name="duration" class="form-select">
+                  <option value="7">1 Week</option>
+                  <option value="14">2 Weeks</option>
+                  <option value="28" selected>4 Weeks</option>
+                  <option value="90">3 Months</option>
+                  <option value="180">6 Months</option>
+                </select>
+              </div>
+              
+              <button type="submit" class="optimize-btn" id="optimizeBtn">
+                <span class="btn-text">Bridge & Optimize</span>
+                <span class="btn-spinner" id="btnSpinner" style="display: none;">Processing...</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results Section -->
+      <section class="results-section" id="resultsSection" style="display: none;">
+        <div class="container">
+          <div class="results-card">
+            <h2 class="section-title">ML Optimization Results</h2>
+            <div class="results-meta" id="resultsMeta"></div>
+            
+            <!-- Bridge Status -->
+            <div id="bridge-status" style="margin-bottom: 20px;"></div>
+            
+            <!-- Claiming Interface -->
+            <div class="claiming-section" id="claimingSection">
+              <div class="claiming-header">
+                <h3 class="claiming-title">Ready to Claim</h3>
+              </div>
+              
+              <div class="rewards-available">
+                <div class="rewards-amount" id="rewardsAmount">847 XLM</div>
+                <div class="rewards-usd" id="rewardsUsd">($203.50)</div>
+              </div>
+              
+              <button class="claim-btn" id="claimRewardsBtn">
+                Claim to Stellar Wallet
+              </button>
+              
+              <div id="claim-status"></div>
+            </div>
+            
+            <div class="allocation-section" id="allocationSection">
+              <h3 class="allocation-title">Optimal Asset Allocation</h3>
+              <div class="allocation-chart" id="allocationChart"></div>
+            </div>
+            
+            <div class="metrics-grid" id="metricsGrid"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Performance Dashboard -->
+      <section class="performance-dashboard" id="performanceDashboard" style="display: none;">
+        <div class="container">
+          <div class="performance-header">
+            <h2 class="performance-title">Performance Analysis</h2>
+            <div class="performance-timeframe">
+              <span>52-Week Historical Data</span>
+            </div>
+          </div>
+          
+          <div class="performance-chart-container">
+            <canvas id="performance-chart"></canvas>
+          </div>
+          
+          <div class="performance-stats">
+            <div class="stat-item baseline-stat">
+              <div class="stat-label">Traditional Portfolio</div>
+              <div class="stat-value">
+                <span class="stat-amount">6.2%</span>
+              </div>
+            </div>
+            <div class="stat-item yieldspan-stat">
+              <div class="stat-label">Yieldspan AI</div>
+              <div class="stat-value">
+                <span class="stat-amount">9.4%</span>
+              </div>
+            </div>
+            <div class="stat-item outperformance-stat">
+              <div class="stat-label">Outperformance</div>
+              <div class="stat-value">
+                <span class="stat-amount">+3.2%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="performance-insights">
+            <div class="insight-item">
+              <div class="insight-icon"></div>
+              <div class="insight-text">
+                Cross-chain arbitrage opportunities identified across ETH-XLM pairs with 15% efficiency gain
+              </div>
+            </div>
+            <div class="insight-item">
+              <div class="insight-icon"></div>
+              <div class="insight-text">
+                ML model reduced portfolio volatility by 23% while maintaining superior returns
+              </div>
+            </div>
+            <div class="insight-item">
+              <div class="insight-icon"></div>
+              <div class="insight-text">
+                Stellar rewards distribution optimized for 12% lower transaction costs
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tech Stack Section -->
+      <section class="tech-section">
+        <div class="container">
+          <h2 class="section-title">Technology Stack</h2>
+          <div class="tech-grid">
+            <div class="tech-item ethereum-tech">
+              <div class="tech-name">Ethereum</div>
+              <div class="tech-desc">Smart contracts, staking infrastructure</div>
+            </div>
+            <div class="tech-item stellar-tech">
+              <div class="tech-name">Stellar</div>
+              <div class="tech-desc">Fast payments, reward distribution</div>
+            </div>
+            <div class="tech-item bridge-tech">
+              <div class="tech-name">Cross-Chain Bridge</div>
+              <div class="tech-desc">Secure asset transfer protocol</div>
+            </div>
+            <div class="tech-item ml-tech">
+              <div class="tech-name">Machine Learning</div>
+              <div class="tech-desc">Portfolio optimization algorithms</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Loading Modal -->
+      <div class="modal" id="loadingModal" style="display: none;">
+        <div class="modal-content">
+          <div class="loading-animation">
+            <h3>Optimizing Your Portfolio</h3>
+            <p>Our AI is analyzing cross-chain opportunities...</p>
+            <div class="loading-spinner"></div>
+            <div class="loading-steps" id="loadingSteps"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

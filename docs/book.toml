@@ -1,0 +1,6 @@
+[book]
+authors = ["Yigid BALABAN"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Yieldspan Documentation"
