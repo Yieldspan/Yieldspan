@@ -128,49 +128,105 @@
                 </select>
               </div>
               
-              <button type="submit" class="optimize-btn" id="optimizeBtn">
-                <span class="btn-text">Bridge & Optimize</span>
-                <span class="btn-spinner" id="btnSpinner" style="display: none;">Processing...</span>
+              <button type="button" class="preview-btn" id="previewBtn">
+                <span class="btn-text">🔍 Preview Investment Strategy</span>
               </button>
             </form>
           </div>
         </div>
       </section>
 
-      <!-- Results Section -->
-      <section class="results-section" id="resultsSection" style="display: none;">
+      <!-- Investment Preview Section -->
+      <section class="investment-preview-section" id="investmentPreviewSection" style="display: none;">
+        <div class="container">
+          <div class="preview-card">
+            <h2 class="section-title">🤖 AI Investment Strategy</h2>
+            <div class="preview-meta" id="previewMeta"></div>
+            
+            <!-- Investment Breakdown -->
+            <div class="investment-breakdown" id="investmentBreakdown">
+              <h3 class="breakdown-title">Your Money Will Be Allocated As Follows:</h3>
+              <div class="allocation-preview" id="allocationPreview"></div>
+            </div>
+            
+            <!-- Expected Returns -->
+            <div class="expected-returns" id="expectedReturns">
+              <h3 class="returns-title">Expected Returns</h3>
+              <div class="returns-summary" id="returnsSummary"></div>
+            </div>
+            
+            <!-- Consent & Deposit -->
+            <div class="consent-section" id="consentSection">
+              <div class="consent-text">
+                <p>✅ I understand where my money will be invested</p>
+                <p>✅ I consent to this allocation strategy</p>
+                <p>✅ I understand the risks involved</p>
+              </div>
+              
+              <div class="deposit-actions">
+                <button class="back-btn" id="backBtn">← Modify Strategy</button>
+                <button class="deposit-btn" id="depositBtn">
+                  <span class="btn-text">💰 Deposit & Execute Strategy</span>
+                  <span class="btn-spinner" id="depositSpinner" style="display: none;">Processing...</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Transaction Results Section -->
+      <section class="transaction-results-section" id="transactionResultsSection" style="display: none;">
         <div class="container">
           <div class="results-card">
-            <h2 class="section-title">ML Optimization Results</h2>
+            <h2 class="section-title">🎉 Investment Executed Successfully!</h2>
             <div class="results-meta" id="resultsMeta"></div>
             
             <!-- Bridge Status -->
             <div id="bridge-status" style="margin-bottom: 20px;"></div>
             
-            <!-- Claiming Interface -->
-            <div class="claiming-section" id="claimingSection">
-              <div class="claiming-header">
-                <h3 class="claiming-title">Ready to Claim</h3>
+            <!-- Investment Tracking -->
+            <div class="investment-tracking" id="investmentTracking">
+              <h3 class="tracking-title">Your Investment is Now Active</h3>
+              <div class="position-summary" id="positionSummary"></div>
+              
+              <!-- Fast Forward Demo -->
+              <div class="demo-controls" id="demoControls">
+                <h4>⏰ Demo: Simulate Time Passing</h4>
+                <div class="time-controls">
+                  <button class="time-btn" data-days="7">+1 Week</button>
+                  <button class="time-btn" data-days="30">+1 Month</button>
+                  <button class="time-btn" data-days="90">+3 Months</button>
+                </div>
+                <div class="time-status" id="timeStatus">Position started now</div>
               </div>
               
-              <div class="rewards-available">
-                <div class="rewards-amount" id="rewardsAmount">847 XLM</div>
-                <div class="rewards-usd" id="rewardsUsd">($203.50)</div>
+              <!-- Claiming Interface (Connected) -->
+              <div class="claiming-section" id="claimingSection" style="display: none;">
+                <div class="claiming-header">
+                  <h3 class="claiming-title">💰 Ready to Claim Yields</h3>
+                  <p class="claiming-desc">Your DeFi yields are ready to be claimed as XLM on Stellar</p>
+                </div>
+                
+                <div class="rewards-available">
+                  <div class="rewards-amount" id="rewardsAmount">0 XLM</div>
+                  <div class="rewards-usd" id="rewardsUsd">($0.00)</div>
+                  <div class="yields-breakdown" id="yieldsBreakdown"></div>
+                </div>
+                
+                <button class="claim-btn" id="claimRewardsBtn" disabled>
+                  Claim Yields to Stellar Wallet
+                </button>
+                
+                <div id="claim-status"></div>
               </div>
-              
-              <button class="claim-btn" id="claimRewardsBtn">
-                Claim to Stellar Wallet
-              </button>
-              
-              <div id="claim-status"></div>
             </div>
             
-            <div class="allocation-section" id="allocationSection">
-              <h3 class="allocation-title">Optimal Asset Allocation</h3>
-              <div class="allocation-chart" id="allocationChart"></div>
-            </div>
+            <!-- Reward Info -->
+            <div id="reward-info" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; display: none;"></div>
             
-            <div class="metrics-grid" id="metricsGrid"></div>
+            <!-- Balance Info -->
+            <div id="balance-info" style="margin-bottom: 20px; padding: 15px; background: #e8f5e8; border-radius: 8px; display: none;"></div>
           </div>
         </div>
       </section>

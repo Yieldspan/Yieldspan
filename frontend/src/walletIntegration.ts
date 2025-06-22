@@ -274,6 +274,14 @@ class WalletManager {
   get canClaim(): boolean {
     return this.isStellarConnected;
   }
+
+  get getEthWallet(): WalletConnection | null {
+    return this.ethWallet;
+  }
+
+  get getStellarWallet(): WalletConnection | null {
+    return this.stellarWallet;
+  }
 }
 
 // Export singleton instance

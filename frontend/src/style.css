@@ -322,13 +322,13 @@ body {
 
 .step-title {
   font-weight: 600;
-  color: var(--foreground);
+  color: var(--foreground) !important;
   font-size: 0.875rem;
 }
 
 .step-desc {
   font-size: 0.75rem;
-  color: var(--secondary);
+  color: var(--secondary) !important;
 }
 
 .flow-arrow {
@@ -830,6 +830,106 @@ body {
   word-break: break-all;
 }
 
+/* Enhanced Bridge Status Styling */
+.bridge-status-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 20px 0;
+  color: white;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+.bridge-status-container h3 {
+  margin: 0 0 20px 0;
+  font-size: 1.3em;
+  font-weight: 600;
+  text-align: center;
+}
+
+.bridge-step {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px;
+  border-left: 4px solid transparent;
+  margin: 8px 0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.bridge-step.active {
+  border-left-color: #00d4aa;
+  background: rgba(0, 212, 170, 0.15);
+  animation: bridgePulse 2s infinite;
+}
+
+.bridge-step.completed {
+  border-left-color: #00d4aa;
+  background: rgba(0, 212, 170, 0.1);
+}
+
+.bridge-step.pending {
+  opacity: 0.6;
+  background: rgba(255,255,255,0.05);
+}
+
+.step-icon {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  margin-right: 16px;
+  font-size: 1.4em;
+  text-align: center;
+  line-height: 32px;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.1em;
+  color: #ffffff;
+}
+
+.step-content div {
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 4px;
+}
+
+.tx-hash {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85em;
+  color: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 8px;
+}
+
+.optimization-details {
+  font-size: 0.9em;
+  color: rgba(255,255,255,0.8);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.success-message {
+  color: #00d4aa;
+  font-weight: 700;
+  margin-top: 12px;
+  font-size: 1.05em;
+}
+
+@keyframes bridgePulse {
+  0% { background: rgba(0, 212, 170, 0.15); }
+  50% { background: rgba(0, 212, 170, 0.25); }
+  100% { background: rgba(0, 212, 170, 0.15); }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
@@ -909,5 +1009,635 @@ body {
 
   .performance-dashboard {
     padding: 2rem 0;
+  }
+}
+
+/* Bridge Notifications */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  z-index: 10000;
+  max-width: 350px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.notification h4 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.notification p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.notification a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.stake-notification {
+  border-left: 4px solid #4CAF50;
+}
+
+.reward-notification {
+  border-left: 4px solid #2196F3;
+}
+
+.error-notification {
+  border-left: 4px solid #f44336;
+}
+
+.bridge-status {
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.bridge-status.connected {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.bridge-status.disconnected {
+  background: #ffebee;
+  color: #c62828;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Price Display */
+.price-display {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.current-price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 1.1rem;
+}
+
+.price-label {
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+.price-value {
+  font-weight: 700;
+  color: var(--foreground);
+  font-size: 1.2rem;
+}
+
+.price-change {
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.price-change.positive {
+  background: #d4edda;
+  color: #155724;
+}
+
+.price-change.negative {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* ETH Conversion Display */
+.eth-equivalent {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.conversion-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--secondary);
+}
+
+.conversion-label {
+  font-weight: 500;
+}
+
+.conversion-value {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.conversion-rate {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* Investment Preview Section */
+.investment-preview-section {
+  background: var(--background);
+  padding: 4rem 0;
+}
+
+.preview-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+.risk-level {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.risk-conservative {
+  color: #28a745;
+  font-weight: 700;
+}
+
+.risk-moderate {
+  color: #ffc107;
+  font-weight: 700;
+}
+
+.risk-aggressive {
+  color: #dc3545;
+  font-weight: 700;
+}
+
+.strategy-desc {
+  color: var(--secondary);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.investment-breakdown {
+  margin-bottom: 2rem;
+}
+
+.breakdown-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--foreground);
+}
+
+.allocation-preview {
+  display: grid;
+  gap: 1rem;
+}
+
+.allocation-preview-item {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.protocol-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex: 1;
+}
+
+.protocol-logo {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.protocol-details {
+  flex: 1;
+}
+
+.protocol-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: var(--foreground);
+}
+
+.protocol-desc {
+  font-size: 0.9rem;
+  color: var(--secondary);
+  margin: 0 0 0.75rem 0;
+  line-height: 1.4;
+}
+
+.protocol-metrics {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.metric-apy, .metric-tvl, .metric-risk {
+  background: var(--white);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.metric-apy {
+  color: var(--primary);
+}
+
+.metric-tvl {
+  color: var(--secondary);
+}
+
+.allocation-amount {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.allocation-amount .percentage {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.allocation-amount .amount {
+  font-size: 0.9rem;
+  color: var(--secondary);
+  margin-top: 0.25rem;
+}
+
+.expected-returns {
+  margin-bottom: 2rem;
+}
+
+.returns-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.returns-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.return-item {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.return-label {
+  font-size: 0.85rem;
+  color: var(--secondary);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.return-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.consent-section {
+  border-top: 2px solid var(--border);
+  padding-top: 2rem;
+}
+
+.consent-text {
+  background: #e8f5e8;
+  border: 1px solid #28a745;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.consent-text p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #155724;
+}
+
+.deposit-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.back-btn {
+  background: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  background: var(--border);
+  transform: translateY(-1px);
+}
+
+.deposit-btn, .preview-btn {
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.deposit-btn:hover, .preview-btn:hover {
+  background: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.deposit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Transaction Results Section */
+.transaction-results-section {
+  background: var(--background);
+  padding: 4rem 0;
+}
+
+.investment-tracking {
+  margin-bottom: 2rem;
+}
+
+.tracking-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.demo-controls {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.demo-controls h4 {
+  margin: 0 0 1rem 0;
+  color: #856404;
+}
+
+.time-controls {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.time-btn {
+  background: #ffc107;
+  color: #212529;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.time-btn:hover {
+  background: #e0a800;
+  transform: translateY(-1px);
+}
+
+.time-status {
+  color: #856404;
+  font-style: italic;
+}
+
+/* Enhanced responsive design */
+@media (max-width: 768px) {
+  .allocation-preview-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .protocol-info {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .deposit-actions {
+    flex-direction: column;
+  }
+  
+  .returns-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .time-controls {
+    flex-direction: column;
+  }
+}
+
+/* Yield Sources Section */
+.yield-sources-section {
+  background: var(--background);
+  padding: 4rem 0;
+}
+
+.yield-sources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.yield-source-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.yield-source-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.yield-source-card[data-risk="low"] {
+  border-left: 4px solid #28a745;
+}
+
+.yield-source-card[data-risk="medium"] {
+  border-left: 4px solid #ffc107;
+}
+
+.yield-source-card[data-risk="high"] {
+  border-left: 4px solid #dc3545;
+}
+
+.yield-source-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.source-logo {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.source-info {
+  flex: 1;
+}
+
+.source-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 0.25rem 0;
+}
+
+.source-protocol {
+  font-size: 0.9rem;
+  color: var(--secondary);
+  font-weight: 500;
+}
+
+.source-apy {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.apy-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.apy-label {
+  font-size: 0.8rem;
+  color: var(--secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.yield-source-body {
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.source-description {
+  color: var(--secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.source-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.metric-label {
+  color: var(--secondary);
+  font-weight: 500;
+}
+
+.metric-value {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.metric-value.risk-low {
+  color: #28a745;
+}
+
+.metric-value.risk-medium {
+  color: #ffc107;
+}
+
+.metric-value.risk-high {
+  color: #dc3545;
+}
+
+/* Enhanced responsive design for new components */
+@media (max-width: 768px) {
+  .yield-sources-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .yield-source-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .source-metrics {
+    grid-template-columns: 1fr;
+  }
+  
+  .current-price {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }
