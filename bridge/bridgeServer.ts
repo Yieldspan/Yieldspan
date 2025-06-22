@@ -7,7 +7,7 @@ import { ethToStellarMap } from "./addressMap";
 import { ETH_CONTRACT_ADDRESS, SEPOLIA_RPC_URL } from "./config";
 
 interface BridgeEvent {
-  type: 'stake' | 'reward' | 'error' | 'status' | 'balance' | 'pong';
+  type: 'stake' | 'reward' | 'error' | 'status' | 'balance' | 'pong' | 'claim_success' | 'claim_error';
   data: any;
   timestamp: number;
 }
@@ -87,6 +87,10 @@ class BridgeServer {
         }
         break;
 
+      case 'claim':
+        await this.handleClaimRequest(client, data);
+        break;
+
       case 'ping':
         this.sendToClient(client, {
           type: 'pong',
@@ -94,6 +98,57 @@ class BridgeServer {
           timestamp: Date.now()
         });
         break;
+    }
+  }
+
+  private async handleClaimRequest(client: ConnectedClient, data: any): Promise<void> {
+    try {
+      console.log("\n💰 Yield Claim Request Received:");
+      console.log("👤 User:", client.ethAddress);
+      console.log("🎯 Stellar Address:", client.stellarAddress);
+      console.log("💎 XLM Amount:", data.xlmAmount);
+
+      if (!client.stellarAddress) {
+        throw new Error('No Stellar address registered for this client');
+      }
+
+      if (!data.xlmAmount || data.xlmAmount <= 0) {
+        throw new Error('Invalid claim amount');
+      }
+
+      // Ensure the Stellar account exists
+      await ensureAccountExists(client.stellarAddress);
+
+      // Send the actual XLM claim reward
+      const txHash = await sendXLMReward(client.stellarAddress, data.xlmAmount);
+      
+      // Broadcast success to all clients
+      this.broadcastToClients({
+        type: 'claim_success',
+        data: {
+          user: client.ethAddress,
+          stellarAddress: client.stellarAddress,
+          xlmAmount: parseFloat(data.xlmAmount.toFixed(7)),
+          txHash,
+          claimType: 'yield_claim'
+        },
+        timestamp: Date.now()
+      });
+
+      console.log("✅ Yield claim completed successfully!\n");
+
+    } catch (error) {
+      console.error("❌ Error processing claim request:", error);
+      
+      // Send error to the specific client
+      this.sendToClient(client, {
+        type: 'claim_error',
+        data: { 
+          message: 'Claim failed', 
+          error: error instanceof Error ? error.message : String(error)
+        },
+        timestamp: Date.now()
+      });
     }
   }
 
@@ -145,11 +200,11 @@ class BridgeServer {
       const userAddress = user.toLowerCase();
       const ethAmount = parseFloat(formatEther(amount));
       
-      console.log("\n📡 ETH Stake Event Received:");
+      console.log("\n📡 ETH Deposit Event Received:");
       console.log("👤 User:", user);
       console.log("💰 Amount:", ethAmount, "ETH");
 
-      // Broadcast stake event to all clients
+      // Broadcast deposit event to all clients
       this.broadcastToClients({
         type: 'stake',
         data: {

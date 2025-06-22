@@ -11,6 +11,9 @@ export const RPC_URL = process.env.RPC_URL || "https://soroban-testnet.stellar.o
 export const CONTRACT_ID = process.env.CONTRACT_ID || "CC5K75G7UM6LNBV4ISEFEMYGPHC4AUNO72WVJWYTY777RJ3622P7WVGQ";
 export const STELLAR_NETWORK = process.env.STELLAR_NETWORK || "testnet";
 
+// HACKATHON DEMO MODE - Set to true when Stellar testnet is having issues
+export const DEMO_MODE = process.env.DEMO_MODE === 'true' || false;
+
 // Validate required config
 if (!ETH_CONTRACT_ADDRESS) {
   throw new Error("SEPOLIA_CONTRACT_ADDRESS is required");
@@ -18,5 +21,8 @@ if (!ETH_CONTRACT_ADDRESS) {
 
 console.log("🔧 Bridge Config Loaded:");
 console.log("📍 ETH Contract Address:", ETH_CONTRACT_ADDRESS);
-console.log("🌐 Sepolia RPC:", SEPOLIA_RPC_URL);
+console.log("🌐 Sepolia RPC:", SEPOLIA_RPC_URL?.slice(0, 50) + '...');
 console.log("⭐ Stellar Network:", STELLAR_NETWORK);
+if (DEMO_MODE) {
+  console.log('🎭 DEMO MODE ENABLED - Using mock transactions for presentation');
+}

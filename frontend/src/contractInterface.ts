@@ -98,13 +98,13 @@ export class EthStakingContract {
       throw new Error('Contract not connected');
     }
 
-    console.log(`🚀 Staking ${ethAmount} ETH...`);
+    console.log(`🚀 Depositing ${ethAmount} ETH...`);
     
     try {
       // Convert ETH amount to wei
       const weiAmount = ethers.parseEther(ethAmount.toString());
       
-      // Call the stakeETH function
+      // Call the stakeETH function (contract method name unchanged for compatibility)
       const tx = await this.contract.stakeETH({
         value: weiAmount,
         gasLimit: 100000 // Reduced gas limit
@@ -124,7 +124,7 @@ export class EthStakingContract {
       }
 
     } catch (error) {
-      console.error('❌ Staking failed:', error);
+      console.error('❌ Deposit failed:', error);
       throw error;
     }
   }

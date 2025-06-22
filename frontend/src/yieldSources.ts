@@ -47,7 +47,7 @@ export const YIELD_SOURCES: YieldSource[] = [
     apy: 4.2,
     tvl: '$45.2B',
     risk: 'Low',
-    description: 'Stake ETH through Lido to earn Ethereum 2.0 staking rewards while keeping your assets liquid.',
+    description: 'Deposit ETH through Lido to earn Ethereum 2.0 staking rewards while keeping your assets liquid.',
     logo: '🔒',
     supported_assets: ['ETH'],
     fees: {

@@ -1,6 +1,5 @@
 import './style.css';
-import { initializeWalletConnections } from './wallet';
-import { reactiveUI } from './ui';
+import { walletManager } from './walletIntegration';
 import { initializePerformanceChart } from './performanceCharts';
 import { bridgeClient } from './bridgeClient';
 import { stakingContract } from './contractInterface';
@@ -62,6 +61,7 @@ class YieldspanApp {
     this.loadingModal = document.getElementById('loadingModal') as HTMLElement;
     
     this.initializeEventListeners();
+    this.initializeWalletConnections();
     this.initializeBridgeIntegration();
     this.addScrollAnimations();
     this.initializePriceDisplay();
@@ -105,7 +105,7 @@ class YieldspanApp {
         metaMaskBtn.textContent = 'Connecting...';
         const ethWallet = await walletManager.connectMetaMask();
         
-        // Connect to staking contract
+        // Connect to deposit contract
         await stakingContract.connect();
         
         // Register with bridge if both wallets are connected
@@ -159,18 +159,31 @@ class YieldspanApp {
         claimBtn.disabled = true;
         claimBtn.textContent = 'Claiming...';
         
-        const rewards = walletManager.calculateRewards(1000, 30);
-        await walletManager.claimRewards(rewards);
-        
-        // Update claiming interface to show success
-        this.updateClaimingInterface();
+        // Get actual portfolio data and request claim through bridge
+        if (walletManager.isEthereumConnected) {
+          const ethWallet = walletManager.getEthWallet;
+          if (ethWallet) {
+            portfolioManager.setCurrentUser(ethWallet.address);
+            const summary = portfolioManager.getPortfolioSummary();
+            
+            if (summary.pending_claims_xlm > 0) {
+              console.log(`🎯 Claiming ${summary.pending_claims_xlm} XLM through bridge...`);
+              
+              // Request claim through bridge server (will send REAL XLM)
+              bridgeClient.requestYieldClaim(summary.pending_claims_xlm);
+              
+            } else {
+              alert('No rewards available to claim');
+            }
+          }
+        }
         
       } catch (error) {
         console.error('Claiming failed:', error);
         alert('Claiming failed. Please try again.');
       } finally {
         claimBtn.disabled = false;
-        claimBtn.textContent = 'Claim to Stellar Wallet';
+        claimBtn.textContent = 'Claim Yields to Stellar Wallet';
       }
     });
   }
@@ -187,10 +200,10 @@ class YieldspanApp {
       this.updateBridgeStatus('disconnected');
     });
 
-    // Real-time stake events
+    // Real-time deposit events
     bridgeClient.on('stake', (data: any) => {
-      console.log('📡 Stake event:', data);
-      this.showStakeNotification(data.data.user, data.data.amount);
+      console.log('📡 Deposit event:', data);
+      this.showDepositNotification(data.data.user, data.data.amount);
     });
 
     // Real-time reward events
@@ -200,13 +213,41 @@ class YieldspanApp {
       this.updateRewardDisplay(data.data);
     });
 
-    // Balance updates
+    // Yield claim success events
+    bridgeClient.on('claim_success', (data: any) => {
+      console.log('✅ Claim success:', data);
+      this.showRewardNotification(data.data.xlmAmount, data.data.txHash);
+      
+      // Mark rewards as claimed in portfolio manager
+      if (walletManager.isEthereumConnected) {
+        const ethWallet = walletManager.getEthWallet;
+        if (ethWallet) {
+          portfolioManager.setCurrentUser(ethWallet.address);
+          const positions = portfolioManager.getUserPositions();
+          positions.forEach(position => {
+            if (position.accrued_yield_xlm > 0) {
+              portfolioManager.claimRewards(position.id, data.data.txHash);
+            }
+          });
+          
+          // Update claiming interface
+          this.updateClaimingInterface();
+        }
+      }
+    });
+
+    // Yield claim error events
+    bridgeClient.on('claim_error', (data: any) => {
+      console.error('❌ Claim error:', data);
+      this.showErrorNotification(`Claim failed: ${data.data.error}`);
+    });
+
+    // Other bridge events
     bridgeClient.on('balance', (data: any) => {
-      console.log('💳 Balance update:', data);
+      console.log('💰 Balance update:', data);
       this.updateBalanceDisplay(data.data.balance, data.data.address);
     });
 
-    // Error handling
     bridgeClient.on('error', (data: any) => {
       console.error('❌ Bridge error:', data);
       this.showErrorNotification(data.data.message);
@@ -347,9 +388,9 @@ class YieldspanApp {
       const amount = parseInt(formData.get('amount') as string);
       const duration = parseInt(formData.get('duration') as string);
 
-      // Execute REAL ETH staking transaction if wallet is connected
+      // Execute REAL ETH deposit transaction if wallet is connected
       if (walletManager.isEthereumConnected) {
-        await this.executeRealStakingTransaction(amount);
+        await this.executeRealDepositTransaction(amount);
       }
 
       // Create portfolio position
@@ -400,7 +441,7 @@ class YieldspanApp {
     }
   }
 
-  private async executeRealStakingTransaction(usdAmount: number): Promise<void> {
+  private async executeRealDepositTransaction(usdAmount: number): Promise<void> {
     const bridgeStatus = document.getElementById('bridge-status');
     if (!bridgeStatus) return;
 
@@ -413,7 +454,7 @@ class YieldspanApp {
             <span class="step-icon">🔗</span>
             <div class="step-content">
               <strong>Step 1: Connecting to Contract</strong>
-              <div>Initializing ETH staking contract...</div>
+              <div>Initializing ETH deposit contract...</div>
             </div>
           </div>
         </div>
@@ -439,14 +480,14 @@ class YieldspanApp {
             <span class="step-icon">💰</span>
             <div class="step-content">
               <strong>Step 2: Executing Real ETH Transaction</strong>
-              <div>Staking ${ethAmount.toFixed(4)} ETH ($${usdAmount})</div>
+              <div>Depositing ${ethAmount.toFixed(4)} ETH ($${usdAmount})</div>
               <div>⏳ Please confirm in MetaMask...</div>
             </div>
           </div>
         </div>
       `;
 
-      // Execute REAL staking transaction
+      // Execute REAL deposit transaction
       const txHash = await stakingContract.stake(ethAmount);
 
       // Step 3: Transaction confirmed
@@ -464,7 +505,7 @@ class YieldspanApp {
             <span class="step-icon">✅</span>
             <div class="step-content">
               <strong>Step 2: ETH Transaction Confirmed</strong>
-              <div>Staked ${ethAmount.toFixed(4)} ETH successfully!</div>
+              <div>Deposited ${ethAmount.toFixed(4)} ETH successfully!</div>
               <div class="tx-hash">
                 TX: <a href="https://sepolia.etherscan.io/tx/${txHash}" target="_blank">${txHash}</a>
               </div>
@@ -474,7 +515,7 @@ class YieldspanApp {
             <span class="step-icon">🌟</span>
             <div class="step-content">
               <strong>Step 3: Waiting for XLM Rewards</strong>
-              <div>Bridge server will detect your stake and send XLM rewards...</div>
+              <div>Bridge server will detect your deposit and send XLM rewards...</div>
               <div>Check notifications for real-time updates!</div>
             </div>
           </div>
@@ -763,11 +804,11 @@ class YieldspanApp {
     }
   }
 
-  private showStakeNotification(user: string, amount: number): void {
+  private showDepositNotification(user: string, amount: number): void {
     const notification = document.createElement('div');
     notification.className = 'notification stake-notification';
     notification.innerHTML = `
-      <h4>🚀 New Stake Detected!</h4>
+      <h4>🚀 New Deposit Detected!</h4>
       <p>User: ${user.slice(0, 8)}...</p>
       <p>Amount: ${amount} ETH</p>
       <p>Sending XLM rewards...</p>

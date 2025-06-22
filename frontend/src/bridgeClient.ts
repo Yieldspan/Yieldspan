@@ -1,5 +1,5 @@
 interface BridgeEvent {
-  type: 'stake' | 'reward' | 'error' | 'status' | 'balance' | 'pong';
+  type: 'stake' | 'reward' | 'error' | 'status' | 'balance' | 'pong' | 'claim_success' | 'claim_error';
   data: any;
   timestamp: number;
 }
@@ -100,6 +100,14 @@ class BridgeClient {
         this.emit('balance', event.data);
         break;
         
+      case 'claim_success':
+        this.emit('claim_success', event.data);
+        break;
+        
+      case 'claim_error':
+        this.emit('claim_error', event.data);
+        break;
+        
       case 'error':
         this.emit('error', event.data);
         break;
@@ -138,6 +146,19 @@ class BridgeClient {
       this.ws.send(JSON.stringify({
         type: 'ping'
       }));
+    }
+  }
+
+  // Request yield claim through bridge
+  requestYieldClaim(xlmAmount: number): void {
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify({
+        type: 'claim',
+        xlmAmount: xlmAmount
+      }));
+      console.log(`💰 Requesting yield claim: ${xlmAmount} XLM`);
+    } else {
+      console.error('❌ Bridge not connected - cannot request claim');
     }
   }
 
