@@ -13,7 +13,7 @@ import { formatAllocations } from "../allocation/allocator";
 
 const router = express.Router();
 
-router.post("/api/allocate", async (req: Request, res: Response) => {
+const handleOptimization = async (req: Request, res: Response) => {
   try {
     const { amount, durationDays = 7 } = req.body;
 
@@ -41,6 +41,9 @@ router.post("/api/allocate", async (req: Request, res: Response) => {
     console.error("❌ Allocation error:", err);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+};
+
+router.post("/api/allocate", handleOptimization);
+router.post("/api/optimize", handleOptimization);
 
 export default router;

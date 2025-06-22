@@ -1,4 +1,11 @@
 // Wallet Integration for Yieldspan Cross-Chain Demo
+import { 
+  isConnected, 
+  requestAccess, 
+  getAddress, 
+  getNetwork,
+  signTransaction 
+} from "@stellar/freighter-api";
 
 interface WalletConnection {
   address: string;
@@ -54,23 +61,35 @@ class WalletManager {
     }
   }
 
-  // Freighter (Stellar) Integration
+  // Freighter (Stellar) Integration - Using Official API
   async connectFreighter(): Promise<WalletConnection> {
     try {
-      if (!window.freighter) {
-        throw new Error('Freighter not found! Please install Freighter wallet');
+      // Check if Freighter is connected using official API
+      const connectionCheck = await isConnected();
+      
+      if (!connectionCheck.isConnected) {
+        throw new Error('Freighter not found! Please install Freighter wallet and refresh the page');
       }
 
-      const publicKey = await window.freighter.getPublicKey();
+      // Request access to user's public key
+      const accessResult = await requestAccess();
       
-      // Mock XLM balance (in real app, would call Stellar API)
+      if (accessResult.error) {
+        throw new Error(`Freighter access denied: ${accessResult.error}`);
+      }
+
+      // Get network information
+      const networkResult = await getNetwork();
+      const networkName = networkResult.error ? 'Unknown Network' : networkResult.network;
+      
+      // Mock XLM balance (in real app, would call Stellar Horizon API)
       const mockXlmBalance = (Math.random() * 1000 + 500).toFixed(2);
 
       this.stellarWallet = {
-        address: publicKey,
+        address: accessResult.address,
         balance: `${mockXlmBalance} XLM`,
         connected: true,
-        network: 'Stellar Testnet'
+        network: networkName
       };
 
       this.updateWalletUI('stellar', this.stellarWallet);
@@ -133,23 +152,22 @@ class WalletManager {
     };
   }
 
-  // Mock Claim Process
+  // Mock Claim Process using Freighter API
   async claimRewards(rewards: RewardsClaim): Promise<string> {
     if (!this.stellarWallet) {
       throw new Error('Please connect Freighter wallet first');
     }
 
     try {
-      // In real app, would create Stellar transaction
+      // In real app, would create Stellar transaction XDR and sign with Freighter
       // For demo, just show signing process
       
-      const mockTxHash = 'stellar_' + Date.now().toString(36);
-      
-      // Update claiming UI
       this.updateClaimingStatus('signing');
       
+      // Simulate signing delay
       await new Promise(resolve => setTimeout(resolve, 2000));
       
+      const mockTxHash = 'stellar_' + Date.now().toString(36);
       this.updateClaimingStatus('success', mockTxHash, rewards.amount);
       
       return mockTxHash;
@@ -186,69 +204,61 @@ class WalletManager {
 
   // UI Update Methods
   private updateWalletUI(chain: 'ethereum' | 'stellar', wallet: WalletConnection) {
-    const container = document.getElementById(`${chain}-wallet-status`);
-    if (container) {
-      container.innerHTML = `
-        <div class="wallet-connected">
-          <div class="wallet-info">
-            <span class="wallet-icon">${chain === 'ethereum' ? '⟨ETH⟩' : '⟨XLM⟩'}</span>
-            <div class="wallet-details">
-              <div class="wallet-address">${wallet.address.slice(0, 6)}...${wallet.address.slice(-4)}</div>
-              <div class="wallet-balance">${wallet.balance}</div>
-            </div>
-          </div>
-          <div class="wallet-status">✅ Connected</div>
+    const btnId = chain === 'ethereum' ? 'connectMetaMaskBtn' : 'connectFreighterBtn';
+    const button = document.getElementById(btnId) as HTMLButtonElement;
+    
+    if (button) {
+      button.textContent = `${chain === 'ethereum' ? 'ETH' : 'XLM'}: ${wallet.address.slice(0, 6)}...${wallet.address.slice(-4)}`;
+      button.style.background = 'var(--primary-light)';
+      button.disabled = true;
+      button.title = `Connected: ${wallet.balance} on ${wallet.network}`;
+    }
+  }
+
+  private updateBridgeStatus(status: 'pending' | 'completed', txHash?: string) {
+    const bridgeStatus = document.getElementById('bridge-status');
+    if (!bridgeStatus) return;
+
+    if (status === 'pending') {
+      bridgeStatus.innerHTML = `
+        <div class="bridge-pending">
+          <strong>Bridge Transaction Pending</strong>
+          <div>Processing cross-chain transfer...</div>
+          <div class="bridge-hash">Hash: ${txHash}</div>
+        </div>
+      `;
+    } else {
+      bridgeStatus.innerHTML = `
+        <div class="bridge-completed">
+          <strong>Bridge Transaction Completed</strong>
+          <div>Successfully transferred to Stellar network</div>
+          <div class="bridge-hash">Hash: ${txHash}</div>
         </div>
       `;
     }
   }
 
-  private updateBridgeStatus(status: 'pending' | 'completed', txHash?: string) {
-    const statusElement = document.getElementById('bridge-status');
-    if (statusElement) {
-      if (status === 'pending') {
-        statusElement.innerHTML = `
-          <div class="bridge-pending">
-            <span class="bridge-icon">🌉</span>
-            <span class="bridge-text">Bridge Processing...</span>
-            <span class="bridge-hash">TX: ${txHash?.slice(0, 10)}...</span>
-          </div>
-        `;
-      } else {
-        statusElement.innerHTML = `
-          <div class="bridge-completed">
-            <span class="bridge-icon">✅</span>
-            <span class="bridge-text">Bridge Completed!</span>
-            <span class="bridge-hash">TX: ${txHash?.slice(0, 10)}...</span>
-          </div>
-        `;
-      }
-    }
-  }
-
   private updateClaimingStatus(status: 'signing' | 'success', txHash?: string, amount?: number) {
-    const claimElement = document.getElementById('claim-status');
-    if (claimElement) {
-      if (status === 'signing') {
-        claimElement.innerHTML = `
-          <div class="claim-signing">
-            <span class="claim-icon">✍️</span>
-            <span class="claim-text">Please sign in Freighter...</span>
-          </div>
-        `;
-      } else {
-        claimElement.innerHTML = `
-          <div class="claim-success">
-            <span class="claim-icon">🎉</span>
-            <span class="claim-text">Claimed ${amount} XLM!</span>
-            <span class="claim-hash">TX: ${txHash?.slice(0, 10)}...</span>
-          </div>
-        `;
-      }
+    const claimStatus = document.getElementById('claim-status');
+    if (!claimStatus) return;
+
+    if (status === 'signing') {
+      claimStatus.innerHTML = `
+        <div class="claim-signing">
+          <span>Signing transaction with Freighter...</span>
+        </div>
+      `;
+    } else {
+      claimStatus.innerHTML = `
+        <div class="claim-success">
+          <span>Successfully claimed ${amount} XLM!</span>
+          <div class="claim-hash">Tx: ${txHash}</div>
+        </div>
+      `;
     }
   }
 
-  // Getters for wallet status
+  // Getters
   get isEthereumConnected(): boolean {
     return this.ethWallet?.connected || false;
   }
@@ -266,15 +276,12 @@ class WalletManager {
   }
 }
 
-// Global wallet manager instance
-const walletManager = new WalletManager();
+// Export singleton instance
+export const walletManager = new WalletManager();
 
-// Type declarations for wallet extensions
+// Type declarations for window objects
 declare global {
   interface Window {
     ethereum?: any;
-    freighter?: any;
   }
-}
-
-export { walletManager, WalletManager, type WalletConnection, type RewardsClaim }; 
+} 

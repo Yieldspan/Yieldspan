@@ -15,15 +15,17 @@
           <div class="header-content">
             <div class="logo">
               <span class="logo-text">Yieldspan</span>
-              <div class="chain-badges">
-                <span class="chain-badge ethereum">ETH</span>
-                <span class="bridge-arrow">↔</span>
-                <span class="chain-badge stellar">XLM</span>
+            </div>
+              <div class="header-actions">
+                <div class="wallet-connections">
+                  <button class="wallet-btn metamask-btn" id="connectMetaMaskBtn">
+                    Connect MetaMask
+                  </button>
+                  <button class="wallet-btn freighter-btn" id="connectFreighterBtn">
+                    Connect Freighter
+                  </button>
+                </div>
               </div>
-            </div>
-            <div class="header-badge">
-              <span class="badge-ml">Cross-Chain ML</span>
-            </div>
           </div>
         </div>
       </header>
@@ -32,40 +34,29 @@
       <section class="hero">
         <div class="container">
           <div class="hero-content">
-            <div class="chain-visual">
-              <div class="chain-item ethereum-chain">
-                <div class="chain-logo">ETH</div>
-                <div class="chain-name">Ethereum</div>
-                <div class="chain-desc">Stake & Earn</div>
+                        <div class="bridge-flow">
+              <div class="flow-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                  <div class="step-title">Stake on Ethereum</div>
+                  <div class="step-desc">ETH/USDC/USDT</div>
+                </div>
               </div>
-              <div class="bridge-connector">
-                <div class="bridge-line"></div>
-                <div class="bridge-icon"></div>
-                <div class="bridge-text">AI Bridge</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                  <div class="step-title">AI Optimization</div>
+                  <div class="step-desc">Cross-Chain Analysis</div>
+                </div>
               </div>
-              <div class="chain-item stellar-chain">
-                <div class="chain-logo">XLM</div>
-                <div class="chain-name">Stellar</div>
-                <div class="chain-desc">Rewards & Yield</div>
-              </div>
-            </div>
-            
-            <!-- Wallet Connection Section -->
-            <div class="wallet-section">
-              <div class="wallet-item">
-                <h4>Connect Ethereum Wallet</h4>
-                <button class="wallet-connect-btn metamask-btn" id="connectMetaMaskBtn">
-                  Connect MetaMask
-                </button>
-                <div id="ethereum-wallet-status"></div>
-              </div>
-              
-              <div class="wallet-item">
-                <h4>Connect Stellar Wallet</h4>
-                <button class="wallet-connect-btn freighter-btn" id="connectFreighterBtn">
-                  Connect Freighter
-                </button>
-                <div id="stellar-wallet-status"></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                  <div class="step-title">Earn on Stellar</div>
+                  <div class="step-desc">XLM Rewards</div>
+                </div>
               </div>
             </div>
             
@@ -98,31 +89,7 @@
       <section class="input-section">
         <div class="container">
           <div class="input-card">
-            <div class="bridge-flow">
-              <div class="flow-step">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                  <div class="step-title">Stake on Ethereum</div>
-                  <div class="step-desc">ETH/USDC/USDT</div>
-                </div>
-              </div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-step">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                  <div class="step-title">AI Optimization</div>
-                  <div class="step-desc">Cross-Chain Analysis</div>
-                </div>
-              </div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-step">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                  <div class="step-title">Earn on Stellar</div>
-                  <div class="step-desc">XLM Rewards</div>
-                </div>
-              </div>
-            </div>
+
             
             <h2 class="section-title">Cross-Chain Portfolio Optimization</h2>
             <p class="section-subtitle">
